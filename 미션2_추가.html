@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Layout</title>
+</head>
+<body>
+    <style>
+        .container {
+            display: grid;
+            width: 400px; /* 가로 기준 크기 */
+            height: 1050px; /* 4:10.5 비율 */
+            grid-template-columns: repeat(4, 1fr); /* 4개의 열 */
+            grid-template-rows: repeat(6, 1fr); /* 6개의 행 */
+            gap: 5px; /* 간격 추가 */
+            background-color: lightgray;
+            padding: 10px;
+          }
+
+        .item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: lightblue;
+            border: 1px solid black;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .item:nth-child(1) {
+            grid-column-start: 1;
+            grid-column-end: 2;
+            grid-row-start: 1;
+            grid-row-end: 2;
+        }
+        .item:nth-child(2) {
+            grid-column-start: 2;
+            grid-column-end: 5;
+            grid-row-start: 1;
+            grid-row-end: 2;
+        }
+        .item:nth-child(3) {
+            grid-column-start: 1;
+            grid-column-end: 5;
+            grid-row-start: 2;
+            grid-row-end: 4;
+        }
+        .item:nth-child(4) {
+            grid-column-start: 1;
+            grid-column-end: 3;
+            grid-row-start: 4;
+            grid-row-end: 6;
+        }
+        .item:nth-child(5) {
+            grid-column-start: 4;
+            grid-column-end: 5;
+            grid-row-start: 4;
+            grid-row-end: 5;
+        }
+        .item:nth-child(6) {
+            grid-column-start: 4;
+            grid-column-end: 5;
+            grid-row-start: 5;
+            grid-row-end: 6;
+        }
+        .item:nth-child(7) {
+            grid-column-start: 1;
+            grid-column-end: 5;
+            grid-row-start: 6;
+            grid-row-end: 7;
+        }
+          
+    </style>
+    <div class="container">
+        <div class="box box-4-1">4:1</div>
+        <div class="box box-1-1">1:1</div>
+        <div class="box box-4-1-5">4:1</div>
+        <div class="box box-1-1">1:1</div>
+</body>
+</html>

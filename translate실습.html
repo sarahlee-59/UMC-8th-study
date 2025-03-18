@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Transform 예제</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            display: flex;
+            gap: 50px;
+        }
+
+        .element-wrapper {
+            width: 150px;
+            height: 150px;
+            background-color: lightblue;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            perspective: 500px; /* 관찰자가 500px 떨어진 위치에서 관찰 */
+        }
+
+        .element {
+            width: 100px;
+            height: 100px;
+            background-color: royalblue;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        /* X축 이동 */
+        .translateX:hover {
+            transform: translateX(50px);
+        }
+
+        /* Y축 이동 */
+        .translateY:hover {
+            transform: translateY(30px);
+        }
+
+        /* 3D 이동 */
+        .translate3d:hover {
+            transform: translate3d(50px, 30px, -40px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="element-wrapper">
+            <div class="element translateX">X 이동</div>
+        </div>
+
+        <div class="element-wrapper">
+            <div class="element translateY">Y 이동</div>
+        </div>
+
+        <div class="element-wrapper">
+            <div class="element translate3d">3D 이동</div>
+        </div>
+    </div>
+
+</body>
+</html>

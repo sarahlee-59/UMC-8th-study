@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Grid Example</title>
+  <style>
+    .wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr; /* 3개의 열 */
+      grid-template-rows: 100px 100px; /* 2개의 행 */
+      gap: 10px; /* 각 요소 사이 여백 */
+      padding: 10px;
+      background-color: lightgray;
+    }
+    
+    .wrapper div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: steelblue;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <div>One</div>
+    <div>Two</div>
+    <div>Three</div>
+    <div>Four</div>
+    <div>Five</div>
+    <div>Six</div>
+    <div>Seven</div>
+    <div>Eight</div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexbox Navbar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between; /* 좌우 정렬 */
+            align-items: center; /* 수직 중앙 정렬 */
+            background-color: black;
+            padding: 20px 20px;
+        }
+
+        .navbar .logo img{
+            width: 120px;
+            height: auto;
+        }
+
+        .navbar .menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar .menu li {
+            margin: 0 15px;
+        }
+
+        .navbar .menu li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="logo.png" alt="logo">
+        </div>
+        <ul class="menu">
+            <li><a href="#">PROJECTS</a></li>
+            <li><a href="#">MEMBERS</a></li>
+            <li><a href="#">NOTICE</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

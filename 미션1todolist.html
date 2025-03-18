@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UMC Study Plan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+        h2 {
+            margin-bottom: 10px;
+        }
+        .container {
+            width: 300px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        .task-list-left {
+            list-style: none;
+            padding: 0;
+            width: 20%; /* 각 리스트의 너비 설정 */
+            margin: 0;
+            float: left;
+        }
+        .task-list-right {
+            list-style: none;
+            padding: 0;
+            width: 20%; /* 각 리스트의 너비 설정 */
+            margin: 0;
+            float: right;
+        }
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+        }
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+        }
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>UMC Study Plan</h2>
+    <div class="container">
+        <input type="text" id="taskInput" placeholder="스터디 계획을 작성해보세요!">
+        <h3>해야 할 일</h3>
+        <ul id="todoList" class="task-list-left"></ul>
+        <h3>해낸 일</h3>
+        <ul id="doneList" class="task-list-right"></ul>
+    </div>
+    <script>
+        document.getElementById("taskInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter" && this.value.trim() !== "") {
+                addTask(this.value.trim());
+                this.value = "";
+            }
+        });
+
+        function addTask(task) {
+            const li = document.createElement("li");
+            li.className = "task-item";
+            li.innerHTML = '${task} <button onclick="completeTask(this)">완료</button>;
+            document.getElementById("todoList").appendChild(li);
+        }
+
+        function completeTask(button) {
+            const taskItem = button.parentElement;
+            button.remove();
+            const deleteButton = document.createElement("button");
+            deleteButton.innerText = "삭제";
+            deleteButton.onclick = function () {
+                taskItem.remove();
+            };
+            taskItem.appendChild(deleteButton);
+            document.getElementById("doneList").appendChild(taskItem);
+        }
+    </script>
+</body>
+</html>

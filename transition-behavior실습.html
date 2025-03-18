@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* 기본 div 스타일 */
+    div {
+      width: 100px;
+      height: 100px;
+      margin: 20px;
+      background-color: red;
+      transition: width 2s ease;
+    }
+
+    /* transition-behavior 속성 예시들 */
+    .allow-discrete {
+      transition-behavior: allow-discrete;
+    }
+
+    .normal {
+      transition-behavior: normal;
+    }
+
+    .inherit {
+      transition-behavior: inherit;
+    }
+
+    .initial {
+      transition-behavior: initial;
+    }
+
+    .revert {
+      transition-behavior: revert;
+    }
+
+    .revert-layer {
+      transition-behavior: revert-layer;
+    }
+
+    .unset {
+      transition-behavior: unset;
+    }
+
+    /* hover 상태에서 width 변경 */
+    div:hover {
+      width: 300px;
+    }
+
+  </style>
+  <title>transition-behavior Example</title>
+</head>
+<body>
+
+<h1>Example of transition-behavior with different values</h1>
+
+<!-- 다양한 transition-behavior 값들을 테스트할 div들 -->
+<div class="allow-discrete">allow-discrete</div>
+<div class="normal">normal</div>
+<div class="inherit">inherit</div>
+<div class="initial">initial</div>
+<div class="revert">revert</div>
+<div class="revert-layer">revert-layer</div>
+<div class="unset">unset</div>
+
+</body>
+</html>
+

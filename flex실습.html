@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flex: 1 1 20px</title>
+    <style>
+        .container {
+            display: flex;
+            width: 300px;
+            border: 2px solid black;
+        }
+
+        .item {
+            flex: 1 1 20px; /* 증가 1, 감소 1, 기본 너비 20px */
+            background-color: lightblue;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid blue;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+    </div>
+</body>
+</html>
