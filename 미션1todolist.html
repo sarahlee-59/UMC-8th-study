@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UMC Study Plan</title>
+    <title>To-Do List</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,26 +23,9 @@
             padding: 8px;
             margin-bottom: 10px;
         }
-        .task-list-left {
+        .task-list {
             list-style: none;
             padding: 0;
-            width: 20%; /* 각 리스트의 너비 설정 */
-            margin: 0;
-            float: left;
-        }
-        .task-list-right {
-            list-style: none;
-            padding: 0;
-            width: 20%; /* 각 리스트의 너비 설정 */
-            margin: 0;
-            float: right;
-        }
-        .task-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px;
-            border: 1px solid #ddd;
-            margin-bottom: 5px;
         }
         .task-item {
             display: flex;
@@ -57,13 +40,13 @@
     </style>
 </head>
 <body>
-    <h2>UMC Study Plan</h2>
+    <h2>To-Do List</h2>
     <div class="container">
-        <input type="text" id="taskInput" placeholder="스터디 계획을 작성해보세요!">
+        <input type="text" id="taskInput" placeholder="해야 할 일을 입력하세요...">
         <h3>해야 할 일</h3>
-        <ul id="todoList" class="task-list-left"></ul>
+        <ul id="todoList" class="task-list"></ul>
         <h3>해낸 일</h3>
-        <ul id="doneList" class="task-list-right"></ul>
+        <ul id="doneList" class="task-list"></ul>
     </div>
     <script>
         document.getElementById("taskInput").addEventListener("keypress", function(event) {
@@ -76,7 +59,7 @@
         function addTask(task) {
             const li = document.createElement("li");
             li.className = "task-item";
-            li.innerHTML = '${task} <button onclick="completeTask(this)">완료</button>;
+            li.innerHTML = `${task} <button onclick="completeTask(this)">완료</button>`;
             document.getElementById("todoList").appendChild(li);
         }
 
