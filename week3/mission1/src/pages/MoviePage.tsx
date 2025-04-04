@@ -22,7 +22,6 @@ export default function MoviePage() {
         const fetchMovies = async () => {
             setIsPending(true);
 
-
             try {
                 const { data } = await axios.get<MovieResponse> (
                 `https://api.themoviedb.org/3/movie/${category}?language=en-US&page=${page}&api_key=15549907a055d2a78faad67a8f1b3817`,
