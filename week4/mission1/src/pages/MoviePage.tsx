@@ -12,9 +12,9 @@ export default function MoviePage() {
         category: string;
     }>();
 
-    const url = `https://api.themoviedb.org/3/movie/${category}?api_key=15549907a055d2a78faad67a8f1b3817&language=ko-KR&page=${page}`;
+    const url = `https://api.themoviedb.org/3/movie/${category}?language=en-US&page=${page}`;
     
-    const { data: movies, isPending, isError } = useCustomFetch<MovieResponse>(url, 'ko-KR');
+    const { data: movies, isPending, isError } = useCustomFetch<MovieResponse>(url, 'en-US');
 
     if (isError) {
         return (

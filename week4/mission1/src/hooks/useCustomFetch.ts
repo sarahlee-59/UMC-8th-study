@@ -22,14 +22,13 @@ function useCustomFetch<T>(
             setIsPending(true);
             
             try {
-                const {data: T} = await axios.get<T>(url, {
+                const { data } = await axios.get<T>(url, {
                     headers: {
                         Authorization: `Bearer ${import.meta.env.VITE_TMDB_KEY}`,
                     },
                     params: {
                         language,
-                    }
-
+                    },
                 });
                 setData(data);
             } catch (e) {

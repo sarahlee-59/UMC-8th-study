@@ -1,12 +1,12 @@
 export type BaseMovie = {
   adult: boolean;
-  backdrop_path: string;
+  backdrop_path: string | null;
   id: number;
   original_language: string;
   original_title: string;
   overview: string;
   popularity: number;
-  poster_path: string;
+  poster_path: string | null;
   release_date: string;
   title: string;
   video: boolean;
@@ -70,3 +70,15 @@ export type MovieDetailResponse = BaseMovie & {
   status: string;
   tagline: string;
 };
+
+export interface Cast {
+  id: number;
+  name: string;
+  profile_path: string;
+  character: string;
+}
+
+export interface CastResponse {
+  id: number;
+  cast: Cast[];
+}

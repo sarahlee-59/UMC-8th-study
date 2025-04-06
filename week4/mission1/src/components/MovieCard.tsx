@@ -15,16 +15,18 @@ export default function MovieCard({ movie }: MovieCardProps) {
             onClick={() => navigate(`/movie/${movie.id}`)}
             className='relative rounded-xl shadow-lg overflow-hidden cursor-pointer
             w-44 transition-transform duration-500 hover:scale-105'
-            onMouseEnter={() : void => setIsHovered(true)}
-            onMouseLeave={() : void => setIsHovered (false)}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
-            <img 
-                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                alt={`${movie.title} 영화의 이미지`}
-                className=''
-             />
+            {movie.poster_path && (
+                <img 
+                    src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                    alt={`${movie.title} 영화의 이미지`}
+                    className=''
+                />
+            )}
 
-             {isHovered && (
+            {isHovered && (
                 <div className='absolute inset-0 bg-gradient-to-t from-black/50
                 to-transparent backdrop-blur-md flex flex-col justify-center
                 items-center text-white p-4'>
@@ -36,7 +38,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
                         {movie.overview}
                     </p>
                 </div>
-             )}
+            )}
         </div>
     );
 }
