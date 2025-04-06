@@ -1,17 +1,30 @@
-import { BrowserRouter as Router, Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
-import MovieDetailPage from "./pages/MovieDetailPage";
-import { Navbar } from "./components/Navbar";
-import MoviePage from "./pages/MoviePage";
+import './App.css';
+import HomePage from './pages/HomePage';
+import MoviePage from './pages/MoviePage';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import NotFoundPage from './pages/NotFoundPage';
+import MovieDetailPage from './pages/MovieDetailPage';
 
-export default function App() {
-  return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Navigate to="/movies/popular" />} />
-        <Route path="/movies/:category" element={<MoviePage />} />
-        <Route path="movie/:movieId" element={<MovieDetailPage />} />
-      </Routes>
-    </BrowserRouter>
-  );
-}
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <HomePage />,
+    errorElement: <NotFoundPage />,
+    children: [
+      {
+        path: 'movies/:category',
+        element: <MoviePage />,
+      },
+      {
+        path: 'movie/:movieId',
+        element: <MovieDetailPage />,
+      },
+    ],
+  },
+]);
+
+function App() {
+  return <RouterProvider router={router} />;
+} 
+
+export default App;
