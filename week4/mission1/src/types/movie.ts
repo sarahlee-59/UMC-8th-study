@@ -1,7 +1,6 @@
-export type Movie = {
+export type BaseMovie = {
   adult: boolean;
   backdrop_path: string;
-  genre_ids: number[];
   id: number;
   original_language: string;
   original_title: string;
@@ -13,6 +12,10 @@ export type Movie = {
   video: boolean;
   vote_average: number;
   vote_count: number;
+}
+
+export type Movie = BaseMovie & {
+  genre_ids: number[];
 };
 
 export type MovieResponse = {
@@ -39,42 +42,31 @@ type ProductionCountries = {
   name: string;
 }
 
-type SpokenLanguage = {
+type SpokenLanguages = {
   english_name: string;
   iso_639_1: string;
   name: string;
 }
 
-export type MovieDetailResponse = {
-  "adult": boolean,
-  "backdrop_path": string,
-  "belongs_to_collection": {
-    id: number,
-    name: string,
-    poster_path: string,
-    backdrop_path: string,
-  },
-  "budget": number,
-  "genres": Genre[],
-  "homepage": string, 
-  "id": number,
-  "imdb_id": string,
-  "origin_country": string[],
-  "original_language": string,
-  "original_title": string,
-  "overview": string,
-  "popularity": number,
-  "poster_path": string,
-  "production_companies": ProductionCompany[],
-  "production_countries": ProductionCountries[],
-  "release_date": string,
-  "revenue": number,
-  "runtime": number,
-  "spoken_languages": SpokenLanguage[],
-  "status": string,
-  "tagline": string,  
-  "title": string,
-  "video": boolean,
-  "vote_average": number,
-  "vote_count": number
+type BelongsToCollection = {
+  id: number;
+  name: string;
+  poster_path: string;
+  backdrop_path: string;
 }
+
+export type MovieDetailResponse = BaseMovie & {
+  belongs_to_collection: BelongsToCollection;
+  budget: number;
+  genres: Genre[];
+  homepage: string;
+  imdb_id: string;
+  origin_country: string[];
+  production_companies: ProductionCompany[];
+  production_countries: ProductionCountries[];
+  revenue: number;
+  runtime: number;
+  spoken_languages: SpokenLanguages[];
+  status: string;
+  tagline: string;
+};
