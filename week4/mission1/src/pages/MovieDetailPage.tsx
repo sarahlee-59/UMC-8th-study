@@ -36,7 +36,8 @@ const MovieDetailPage = () => {
     );
   }
 
-  if (!movie) return null;
+  if (!movie) 
+    return null;
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
