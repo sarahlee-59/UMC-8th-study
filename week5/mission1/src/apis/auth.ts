@@ -20,7 +20,7 @@ export const postSignin = async (
     body: RequestSigninDto,
 ): Promise<ResponseSigninDto> => {
     const { data } = await axiosInstance.post("/v1/auth/signin", body);
-
+    console.log("로그인 성공:", data);
     return data;
 };
 

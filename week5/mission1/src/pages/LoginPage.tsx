@@ -2,11 +2,19 @@ import useForm from '../hooks/useForm';
 import { useNavigate } from 'react-router-dom';
 import { UserSigninInformation, validateSignin } from '../utils/validate';
 import { useAuth } from '../context/AuthContext';
+import { useEffect } from 'react';
 
 const LoginPage = () => {
-    const { login } = useAuth();
+    const { accessToken, login } = useAuth();
     const navigate = useNavigate();
 
+    useEffect( () => {
+        if (accessToken) {
+            navigate("/");
+            console.log("Access token:", accessToken);
+        }
+    }, [navigate, accessToken]);
+    
     const handleBackClick = () => {
         navigate("/");
     };
