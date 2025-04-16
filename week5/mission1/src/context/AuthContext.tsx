@@ -9,13 +9,15 @@ interface AuthContextType {
     refreshToken: string | null;
     login: (signInData: RequestSigninDto) => Promise<void>;
     logout: () => Promise<void>;
+    user: {email:string} | null;
 }
 
 export const AuthContext = createContext<AuthContextType>( {
     accessToken: null,
     refreshToken: null,
-    login: async () => {},
-    logout: async () => {},
+    login: async () => { },
+    logout: async () => { },
+    user: null
 })
 
 export const AuthProvider = ({children}: PropsWithChildren) => {
@@ -29,6 +31,8 @@ export const AuthProvider = ({children}: PropsWithChildren) => {
         setItem: setRefreshTokenInStorage,
         removeItem: removeRefreshTokenFromStorage,
     } = useLocalStorage(LOCAL_STORAGE_KEY.refreshToken);
+
+    const [user, setUser] = useState<{email:string} | null>(null);
 
     const [accessToken, setAccessToken] = useState<string | null> (
         getAccessTokenFromStorage(),
@@ -50,13 +54,15 @@ export const AuthProvider = ({children}: PropsWithChildren) => {
                 setAccessToken(newAccessToken);
                 setRefreshToken(newRefreshToken);
 
+                setUser({email: signinData.email});
+                
                 alert("로그인 성공");   
                 window.location.href = "/my";
 
             }
         } catch (error) {
-        console.error("로그인 오류", error);
-        alert("로그인 실패");
+            console.error("로그인 오류", error);
+            alert("로그인 실패");
         }
     };
 
@@ -77,7 +83,7 @@ export const AuthProvider = ({children}: PropsWithChildren) => {
     };
 
     return (
-        <AuthContext.Provider value = {{accessToken, refreshToken, login, logout}}>
+        <AuthContext.Provider value = {{accessToken, refreshToken, login, logout, user}}>
             {children}
         </AuthContext.Provider>
     );
@@ -89,5 +95,5 @@ export const useAuth = () => {
         throw new Error("AuthContext를 찾을 수 없습니다.");
     }
     
-    return context
+    return context;
 };

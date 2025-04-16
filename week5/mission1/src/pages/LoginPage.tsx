@@ -1,5 +1,5 @@
 import useForm from '../hooks/useForm';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { UserSigninInformation, validateSignin } from '../utils/validate';
 import { useAuth } from '../context/AuthContext';
 import { useEffect } from 'react';
@@ -10,13 +10,15 @@ import { LOCAL_STORAGE_KEY } from '../constants/key';
 const LoginPage = () => {
     const { accessToken, login } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect( () => {
         if (accessToken) {
-            navigate("/");
-            console.log("Access token:", accessToken);
+            if (location.pathname === "/login") {
+                navigate("/");
+            }
         }
-    }, [navigate, accessToken]);
+    }, [navigate, accessToken, location.pathname]);
     
     const handleBackClick = () => {
         navigate("/");
@@ -35,9 +37,12 @@ const LoginPage = () => {
             console.log(values);
             try {
                 const response: ResponseSigninDto = await postSignin(values);
+                login({ email: values.email, password: values.password });
+                
                 navigate("/my"); // 이동 추가
             } catch (error) {
-              alert(error);
+                console.error("로그인 실패:", error);
+                alert(error);
             }
         };
 
