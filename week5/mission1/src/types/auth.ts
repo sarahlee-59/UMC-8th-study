@@ -9,6 +9,8 @@ export type RequestSignupDto = {
 }
 
 export type ResponseSignupDto = CommonResponse<{
+    accessToken: string;
+    refreshToken?: string;
     id: number;
     name: string;
     email: string;

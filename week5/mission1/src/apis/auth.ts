@@ -17,11 +17,11 @@ export const postSignup = async (
 };
 
 export const postSignin = async (
-    body: RequestSigninDto,
+    body: RequestSigninDto
 ): Promise<ResponseSigninDto> => {
     const { data } = await axiosInstance.post("/v1/auth/signin", body);
     console.log("로그인 성공:", data);
-    return data;
+    return data; // 서버에서 받은 data가 ResponseSigninDto 타입이어야 함
 };
 
 export const getMyInfo = async ():Promise<ResponseMyInfoDto> => {

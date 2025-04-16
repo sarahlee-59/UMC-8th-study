@@ -55,7 +55,7 @@ export const AuthProvider = ({children}: PropsWithChildren) => {
 
             }
         } catch (error) {
-        console.error("로그인 오류", Error);
+        console.error("로그인 오류", error);
         alert("로그인 실패");
         }
     };

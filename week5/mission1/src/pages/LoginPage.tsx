@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { UserSigninInformation, validateSignin } from '../utils/validate';
 import { useAuth } from '../context/AuthContext';
 import { useEffect } from 'react';
+import { ResponseSigninDto } from '../types/auth';
+import { postSignin } from '../apis/auth';
+import { LOCAL_STORAGE_KEY } from '../constants/key';
 
 const LoginPage = () => {
     const { accessToken, login } = useAuth();
@@ -28,15 +31,15 @@ const LoginPage = () => {
             validate: validateSignin,
         });
 
-    const handleSubmit = async() => {
-        try {
-            await login(values);
-            navigate("/my");
-        } catch {
-            navigate("/");
-            alert("로그인 실패");
-        }
-    };
+        const handleSubmit = async () => {
+            console.log(values);
+            try {
+                const response: ResponseSigninDto = await postSignin(values);
+                navigate("/my"); // 이동 추가
+            } catch (error) {
+              alert(error);
+            }
+        };
 
     // 오류가 하나라도 있거나, 입력값이 비어 있으면 버튼 비활성화
     const isDisabled = 
