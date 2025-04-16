@@ -5,7 +5,6 @@ import { useAuth } from '../context/AuthContext';
 import { useEffect } from 'react';
 import { ResponseSigninDto } from '../types/auth';
 import { postSignin } from '../apis/auth';
-import { LOCAL_STORAGE_KEY } from '../constants/key';
 
 const LoginPage = () => {
     const { accessToken, login } = useAuth();
@@ -46,6 +45,11 @@ const LoginPage = () => {
             }
         };
 
+        const handleGoogleLogin = () => {
+            window.location.href = 
+            import.meta.env.VITE_sERVER_API_URL + "/v1/auth/google/login";
+        };
+
     // 오류가 하나라도 있거나, 입력값이 비어 있으면 버튼 비활성화
     const isDisabled = 
         Object.values(errors || {}).some((error) => error.length > 0) || // 오류가 있으면 true
@@ -54,20 +58,8 @@ const LoginPage = () => {
     return (
         <div className="flex flex-col items-center justify-center h-full gap-4 bg-black text-white">
             <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-2">
-                    <button className="text-2xl" onClick={handleBackClick}>&lt;</button>
-                    <h1 className="text-3xl font-medium text-center w-full">로그인</h1>
-                </div>
-                <br />
-                <button className="w-full flex items-center justify-center border border-white py-2 rounded-md mb-4">
-                <img src="google.png" alt="Google" className="w-5 h-5 mr-2" />구글 로그인</button>
                 
-                <div className="flex items-center w-full gap-2 my-2">
-                    <hr className="flex-grow border-t border-white opacity-50" />
-                    <span className="text-sm text-white">OR</span>
-                    <hr className="flex-grow border-t border-white opacity-50" />
-                </div>
-
+               
                 <input 
                     {...getInputProps("email")}
                     name="email"
@@ -96,6 +88,16 @@ const LoginPage = () => {
                     className="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-medium hover:bg-blue-700 transition-colors cursor-pointer disabled:bg-gray-300"
                 >
                     로그인
+                </button>
+                <button 
+                    type='button' 
+                    onClick={handleGoogleLogin} 
+                    className="w-full bg-blue-600 text-white py-3 rounded-md text-lg font-medium hover:bg-blue-700 transition-colors cursor-pointer disabled:bg-gray-300"
+                >
+                    <div className="flex items-center justify-center gap-4">
+                        <img src={"google.png"} alt="Google Logo Image"/>
+                        <span>구글 로그인</span>
+                    </div>
                 </button>
             </div>
         </div>
