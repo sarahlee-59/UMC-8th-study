@@ -24,4 +24,15 @@ export type Lp = {
     likes: Likes[];
 }
 
+export type LpListResponse = {
+    status: boolean;
+    statusCode: number;
+    message: string;
+    data: {
+      data: Lp[];           // LP 항목 리스트
+      hasNext: boolean;
+      nextCursor: number;
+    };
+  };
+
 export type ResponseLpListDto = CursorBasedResponse<Lp[]>;

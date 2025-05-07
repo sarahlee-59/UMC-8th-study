@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Lp } from "../types/lp";
+import { Lp } from "../../types/lp";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 interface LpCardProps {
   lp: Lp;

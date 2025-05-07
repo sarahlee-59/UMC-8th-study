@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import LpCard from "../components/LpCard";
+import LpCard from "../components/LpCard/LpCard";
 import { Lp } from "../types/lp";
 
 const fetchLps = async (): Promise<Lp[]> => {
