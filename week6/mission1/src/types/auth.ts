@@ -37,6 +37,7 @@ export type ResponseSigninDto = CommonResponse<{
 
 // 내 정보 조회
 export type ResponseMyInfoDto = CommonResponse<{
+    nickname: string;
     id: number;
     name: string;
     email: string;

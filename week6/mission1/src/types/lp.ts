@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import { CursorBasedResponse } from './common.ts';
 
 export type Tag = {
@@ -12,18 +11,17 @@ export type Likes = {
     lpId: number;
 }
 
-export type ResponseLpListDto = CursorBasedResponse<{
-    data: {
-        title: ReactNode;
-        id: number;
-        name: string;
-        content: string;
-        thumbnail: string;
-        published: boolean;
-        authorId: number;
-        createdAt: Date;
-        updatedAt: Date;
-        tags: Tag[];
-        likes: Likes[];
-    }[];
-}>;
+export type Lp = {
+    id: number;
+    title: string;
+    content: string;
+    thumbnail: string;
+    published: boolean;
+    authorId: number;
+    createdAt: string;
+    updatedAt: string;
+    tags: Tag[];
+    likes: Likes[];
+}
+
+export type ResponseLpListDto = CursorBasedResponse<Lp[]>;

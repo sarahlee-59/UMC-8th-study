@@ -1,4 +1,3 @@
-// components/ProtectedRoute.tsx
 import { Navigate } from "react-router-dom";
 import { LOCAL_STORAGE_KEY } from "../constants/key";
 
