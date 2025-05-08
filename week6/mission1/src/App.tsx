@@ -26,7 +26,6 @@ const publicRoutes: RouteObject[] = [
       { path: "login", element: <LoginPage /> },
       { path: "signup", element: <SignupPage /> },
       { path: "v1/auth/google/callback", element: <GoogleLoginRedirectPage/>},
-      { path: "/lp/:lpId", element: <LpDetailPage />}
       
     ],
   },
@@ -41,7 +40,9 @@ const protectedRoutes: RouteObject[] = [
     children: [
       { path: "my", element: <MyPage /> }, // 내 정보
       { path: "lps/my", element: <MyLpListPage /> }, // 내가 생성한 LP 목록
+      { path: "/lp/:id", element: <LpDetailPage />}
     ],
+    
   },
 ];
 

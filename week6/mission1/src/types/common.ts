@@ -5,11 +5,11 @@ export type CommonResponse<T> = {
     data: T;
 };
 
-export type CursorBasedResponse<T> = CommonResponse<{
+export type CursorBasedResponse<T> = {
     data: T;
-    nextCursor: number | null; 
+    nextCursor: number;
     hasNext: boolean;
-}>;
+};
 
 export enum PAGINATION_ORDER {
     "asc" = "asc",

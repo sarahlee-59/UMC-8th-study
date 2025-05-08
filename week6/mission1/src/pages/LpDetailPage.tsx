@@ -4,11 +4,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { Lp } from "../types/lp";
-import { useInfiniteComments } from "hooks/queries/useInfiniteComments";
 import CommentListSkeletonList from "../components/CommentCard/CommentListSkeletonList";
-import CommentCard from "../components/CommentCard";
+import CommentCard from "../components/CommentCard/CommentList";
+import useGetInfiniteCommentsByLpId from "../hooks/queries/useGetInfiniteCommentsByLpId";
+import CommentInput from "../components/CommentCard/CommentInput";
 
-const fetchLpById = async (id: string): Promise<Lp> => {
+
+const fetchLpById = async (id: number): Promise<Lp> => {
   const response = await axios.get(`http://localhost:8000/v1/lps/${id}`);
   return response.data.data;
 };
@@ -18,9 +20,13 @@ const LpDetailPage = () => {
   const params = useParams();
   const id = params.id;
 
+  console.log("params.id", id);
+
   const getLpDetail = () => {
-    return fetchLpById(id!);
+    return fetchLpById(Number(id!));
   };
+
+  const [order, setOrder] = useState<"asc" | "desc">("desc");
 
   const {
     data: lp,
@@ -31,8 +37,7 @@ const LpDetailPage = () => {
     queryFn: getLpDetail,
     enabled: !!id,
   });
-
-  const [order, setOrder] = useState<"asc" | "desc">("desc");
+  
   const {
     data: commentPages,
     fetchNextPage,
@@ -40,7 +45,7 @@ const LpDetailPage = () => {
     isFetching,
     isLoading: commentLoading,
     refetch,
-  } = useInfiniteComments(id!, order);
+  } = useGetInfiniteCommentsByLpId(id!, order);
 
   const { ref, inView } = useInView();
 
@@ -54,9 +59,9 @@ const LpDetailPage = () => {
     }
   }, [inView, hasNextPage, isFetching, fetchNextPage]);
 
-  if (isError || !lp) {
-    return <div className="text-red-500">Error Occurred</div>;
-  }
+  //if (isError || !lp) {
+   // return <div className="text-red-500">Error Occurred</div>;
+  //}
 
   return (
     <div className="max-w-4xl text-white mx-auto px-6 py-10 space-y-6">
@@ -72,12 +77,12 @@ const LpDetailPage = () => {
       </div>
 
       <img
-        src={lp.thumbnail}
-        alt={lp.title}
+        src={lp?.thumbnail}
+        alt={lp?.title}
         className="w-64 h-64 object-cover mx-auto"
       />
-      <h2 className="text-2xl font-bold">{lp.title}</h2>
-      <p>{lp.content}</p>
+      <h2 className="text-2xl font-bold">{lp?.title}</h2>
+      <p>{lp?.content}</p>
 
       {/* 댓글 정렬 토글 */}
       <div className="flex justify-end gap-2 mb-4">
@@ -95,21 +100,30 @@ const LpDetailPage = () => {
         </button>
       </div>
 
-      {/* 댓글 리스트 */}
-      <div className="space-y-4">
-        {commentPages?.pages
-          .flatMap((page) => page.data.data)
-          .map((comment) => (
-            <CommentCard
-              key={comment.id}
-              author={comment.author.name}
-              content={comment.content}
-              createdAt={comment.createdAt}
-            />
-          ))}
+      <div className="space-y-4 mt-10 text-white">
+  <div className="font-bold text-2xl">댓글</div>
 
-        {isFetching && <CommentListSkeletonList count={5} />}
-        <div ref={ref} className="h-10" />
+  {/* ✅ 입력창은 항상 보여줍니다 */}
+  <CommentInput />
+
+  {/* ✅ 댓글 목록 */}
+  {commentLoading ? (
+    <CommentListSkeletonList count={5} />
+  ) : (
+    commentPages?.pages
+      .flatMap((page) => page.data)
+      .map((comment) => (
+        <CommentCard
+          key={comment.id}
+          author={comment.author?.name}
+          content={comment.content}
+          createdAt={comment.createdAt}
+        />
+      ))
+  )}
+
+  {isFetching && <CommentListSkeletonList count={3} />}
+  <div ref={ref} className="h-10" />
       </div>
     </div>
   );
