@@ -31,3 +31,21 @@ export const getCommentsByLpId = async (
   );
   return res.data;
 };
+
+export interface Comment {
+  id: number;
+  content: string;
+  lpId: number;
+  authorId: number;
+  createdAt: string;
+  updatedAt: string;
+  author: {
+    id: number;
+    name: string;
+    email: string;
+    bio: string | null;
+    avatar: string | null;
+    createdAt: string;
+    updatedAt: string;
+  };
+}

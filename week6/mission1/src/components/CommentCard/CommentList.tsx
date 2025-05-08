@@ -34,10 +34,10 @@ const CommentList = ({comments}: CommentListProps) => {
             {sortedComments.map((comment) => (
             <div key={comment.id} className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center font-bold">
-                {comment.author[0]}
+                {comment.author.name}
                 </div>
                 <div className="flex flex-col items-start ml-2">
-                    <span className="font-semibold">{comment.author}</span>
+                    <span className="font-semibold">{comment.author.name}</span>
                     <p className="text-sm text-gray-300">{comment.content}</p>
                     <span className="text-xs text-gray-500 mt-1">
                         {new Date(comment.createdAt).toLocaleString()}
