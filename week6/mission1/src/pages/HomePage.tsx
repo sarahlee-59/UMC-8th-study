@@ -4,6 +4,7 @@ import axios from "axios";
 import { useInView } from "react-intersection-observer";
 import LpCard from "../components/LpCard/LpCard";
 import { Lp } from "../types/lp";
+import LpCardSkeletonList from "../components/LpCard/LpCardSkeletonList";
 
 const fetchInfiniteLps = async ({ pageParam = 0, queryKey }: any) => {
     const [, sortOrder] = queryKey; // ✅ 이름 충돌 방지
@@ -91,10 +92,11 @@ const HomePage = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-        {sortedData.map((lp) => (
-          <LpCard key={lp.id} lp={lp} />
-        ))}
-      </div>
+      {sortedData.map((lp) => (
+      <LpCard key={lp.id} lp={lp} />
+      ))}
+      {isFetching && <LpCardSkeletonList count={12} />}
+    </div>
 
       {/* 무한스크롤 감시용 ref */}
       <div ref={ref} className="h-10" />
