@@ -37,4 +37,13 @@ export type LpListResponse = {
 
 export type ResponseLpListDto = CursorBasedResponse<Lp[]>;
 
-// 10분 37초
+export type RequestLpDto = {
+  lpId: number;
+}
+
+export type ResponseLikeLpDto = {
+  data: any;
+  id: number;
+  userId: number;
+  lpId: number;
+}

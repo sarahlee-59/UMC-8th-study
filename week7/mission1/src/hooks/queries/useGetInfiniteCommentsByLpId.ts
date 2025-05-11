@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getCommentsByLpId } from "../../types/comment";
+import { getCommentsByLpId } from "../../apis/comment";
 import { CursorBasedResponse } from "../../types/common";
 import { CommentResponse } from "../../types/comment";
 
