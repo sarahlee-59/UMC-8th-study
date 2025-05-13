@@ -19,17 +19,40 @@ export const getMyInfo = async () => {
   const rawToken = localStorage.getItem(LOCAL_STORAGE_KEY.accessToken);
   const token = rawToken?.replace(/^"|"$/g, "");
 
-  const res = await axios.get("http://localhost:8000/v1/users/me", {
+  const res = await axiosInstance.get("/v1/users/me", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  return res.data; // { data: { id, name, email } }
+  return res.data;
 };
+
 
 export const postLogout = async() => {
 
     const {data}= await axiosInstance.post("/v1/auth/signout"); 
     return data; 
+};
+
+export const updateMyInfo = async (data: {
+  name: string;
+  bio?: string;
+  avatar?: string;
+}) => {
+  const rawToken = localStorage.getItem(LOCAL_STORAGE_KEY.accessToken);
+  const token = rawToken?.replace(/^"|"$/g, "");
+
+  const res = await axios.patch("http://localhost:8000/v1/users", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+export const deleteUser = async () => {
+  const { data } = await axiosInstance.delete("/v1/users");
+  return data;
 };
