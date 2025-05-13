@@ -63,3 +63,13 @@ export const deleteLike = async (lpId: number): Promise<ResponseLikeLpDto> => {
 
   return data;
 }
+
+export const getLikedLps = async (userId: number) => {
+  const res = await axios.get(`/v1/users/${userId}/likes`);
+  return res.data.data;
+};
+
+export const getMyLps = async (userId: number) => {
+  const res = await axios.get(`/v1/users/${userId}/lps`);
+  return res.data.data;
+};

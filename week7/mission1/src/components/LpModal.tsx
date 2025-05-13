@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postLp } from "../apis/lp";
-import { useAuth } from "../context/AuthContext";
+import useAuth from "../context/AuthContext";
 import axios from "axios";
 
 const apiUrl = import.meta.env.VITE_SERVER_API_URL;

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { getMyInfo, updateMyInfo } from "../apis/auth";
-import { useAuth } from "../context/AuthContext";
+import { getMyInfo } from "../apis/auth";
+import useAuth from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import useUpdateNickname from "../hooks/mutations/useUpdateNickname";
 
 interface FormState {
   name: string;
@@ -14,6 +14,8 @@ interface FormState {
 const MyPage = () => {
   const navigate = useNavigate();
   const { logout, setUser } = useAuth(); // ✅ setUser 가져오기
+  const updateNickname = useUpdateNickname();
+  
   const [data, setData] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -36,17 +38,6 @@ const MyPage = () => {
     fetch();
   }, []);
 
-  const mutation = useMutation<any, unknown, FormState>({
-    mutationFn: updateMyInfo,
-    onSuccess: async () => {
-      const updated = await getMyInfo();
-      setData(updated);
-      setUser(updated.data); // ✅ 전역 상태 업데이트 (상단 환영 메시지 반영됨)
-      setIsEditing(false);
-      alert("정보가 수정되었습니다.");
-    },
-  });
-
   const handleLogout = async () => {
     await logout();
     navigate("/");
@@ -58,11 +49,14 @@ const MyPage = () => {
       return;
     }
 
-    mutation.mutate({
-      name: form.name,
-      bio: form.bio || "",
-      avatar: form.avatar || "",
-    });
+    updateNickname.mutate(form, {
+    onSuccess: async () => {
+      const updated = await getMyInfo();
+      setData(updated);
+      setUser(updated.data); // ✅ Navbar까지 닉네임 갱신 반영
+      setIsEditing(false);
+      alert("정보가 수정되었습니다.");
+    }});
   };
 
   const handleAvatarUpload = async (file: File) => {

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { UserSigninInformation, validateSignin } from "../utils/validate";
 import useForm from "../hooks/useForm";
 import { postSignin } from "../apis/auth";
-import { useAuth } from "../context/AuthContext";
+import useAuth from "../context/AuthContext";
 
 const LoginPage = () => {
   const {

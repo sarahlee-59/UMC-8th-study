@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "../../context/AuthContext";
+import useAuth from "../../context/AuthContext";
 import { postComment } from "../../apis/comment"; // ✅ API 함수가 있어야 함
 
 interface CommentInputProps {

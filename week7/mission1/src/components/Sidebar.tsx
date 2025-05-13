@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { deleteUser } from "../apis/auth";
-import { useAuth } from "../context/AuthContext";
+import useAuth from "../context/AuthContext.tsx";
 
 const Sidebar = () => {
     const nav = useNavigate();

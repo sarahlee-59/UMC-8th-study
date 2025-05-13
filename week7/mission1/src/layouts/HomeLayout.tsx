@@ -6,7 +6,7 @@ import Sidebar from "../components/Sidebar";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { postLogout } from "../apis/auth";
-import { useAuth } from "../context/AuthContext";
+import useAuth from "../context/AuthContext";
 
 const HomeLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);

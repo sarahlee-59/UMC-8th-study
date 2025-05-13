@@ -1,8 +1,6 @@
-// ✅ AuthContext.tsx - 로그인 상태 및 사용자 정보 관리
-import { createContext, PropsWithChildren, useContext, useState, useEffect } from "react";
-import { RequestSigninDto } from "../types/auth";
-import { postSignin, postLogout, getMyInfo } from "../apis/auth";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+// ✅ AuthContext.tsx - 사용자 인증 상태를 전역으로 관리하는 Context
+import { createContext, useContext, useEffect, useState, PropsWithChildren } from "react";
+import { getMyInfo, postSignin, postLogout } from "../apis/auth";
 import { LOCAL_STORAGE_KEY } from "../constants/key";
 
 interface User {
@@ -15,78 +13,49 @@ interface AuthContextType {
   accessToken: string | null;
   refreshToken: string | null;
   user: User | null;
-  login(signinData: RequestSigninDto): Promise<void>;
-  logout(): Promise<void>;
-
-  // ✅ setter 함수들 포함
-  setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
-  setRefreshToken: React.Dispatch<React.SetStateAction<string | null>>;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  setUser: (user: User | null) => void;
+  setAccessToken: (token: string | null) => void;
+  setRefreshToken: (token: string | null) => void;
 }
 
-export const AuthContext = createContext<AuthContextType>({
+const AuthContext = createContext<AuthContextType>({
   accessToken: null,
   refreshToken: null,
   user: null,
   login: async () => {},
   logout: async () => {},
+  setUser: () => {},
   setAccessToken: () => {},
   setRefreshToken: () => {},
-  setUser: () => {},
 });
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const {
-    getItem: getAccessTokenFromStorage,
-    setItem: setAccessTokenInStorage,
-    removeItem: removeAccessTokenFromStorage,
-  } = useLocalStorage(LOCAL_STORAGE_KEY.accessToken);
-
-  const {
-    getItem: getRefreshTokenFromStorage,
-    setItem: setRefreshTokenInStorage,
-    removeItem: removeRefreshTokenFromStorage,
-  } = useLocalStorage(LOCAL_STORAGE_KEY.refreshToken);
-
   const [accessToken, setAccessToken] = useState<string | null>(
-    getAccessTokenFromStorage()
+    localStorage.getItem(LOCAL_STORAGE_KEY.accessToken)
   );
   const [refreshToken, setRefreshToken] = useState<string | null>(
-    getRefreshTokenFromStorage()
+    localStorage.getItem(LOCAL_STORAGE_KEY.refreshToken)
   );
   const [user, setUser] = useState<User | null>(null);
 
-  const login = async (signinData: RequestSigninDto) => {
-    try {
-      const { data } = await postSignin(signinData);
-      const newAccessToken = data.accessToken;
-      const newRefreshToken = data.refreshToken;
-
-      localStorage.setItem(LOCAL_STORAGE_KEY.accessToken, newAccessToken);
-      localStorage.setItem(LOCAL_STORAGE_KEY.refreshToken, newRefreshToken);
-
-      setAccessToken(newAccessToken);
-      setRefreshToken(newRefreshToken);
-      setUser({ id: data.id, name: data.name, email: signinData.email });
-
-      alert("로그인 성공");
-    } catch (err) {
-      console.error("로그인 실패", err);
-      alert("로그인 실패");
-    }
+  const login = async (email: string, password: string) => {
+    const { data } = await postSignin({ email, password });
+    localStorage.setItem(LOCAL_STORAGE_KEY.accessToken, data.accessToken);
+    localStorage.setItem(LOCAL_STORAGE_KEY.refreshToken, data.refreshToken);
+    setAccessToken(data.accessToken);
+    setRefreshToken(data.refreshToken);
+    setUser({ id: data.id, name: data.name, email });
   };
 
   const logout = async () => {
-    try {
-      await postLogout();
-      removeAccessTokenFromStorage();
-      removeRefreshTokenFromStorage();
-      setAccessToken(null);
-      setRefreshToken(null);
-      setUser(null);
-    } catch (err) {
-      console.error("로그아웃 실패", err);
-    }
+    await postLogout();
+    setAccessToken(null);
+    setRefreshToken(null);
+    setUser(null);
+    localStorage.removeItem(LOCAL_STORAGE_KEY.accessToken);
+    localStorage.removeItem(LOCAL_STORAGE_KEY.refreshToken);
   };
 
   useEffect(() => {
@@ -96,12 +65,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
           const res = await getMyInfo();
           setUser(res.data);
         } catch (err) {
-          console.error("유저 정보 가져오기 실패", err);
+          console.error("사용자 정보 불러오기 실패", err);
         }
       }
     };
     fetchUser();
-  }, [accessToken, user]);
+  }, [accessToken]);
 
   return (
     <AuthContext.Provider
@@ -111,9 +80,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         user,
         login,
         logout,
+        setUser,
         setAccessToken,
         setRefreshToken,
-        setUser,
       }}
     >
       {children}
@@ -121,4 +90,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export default function useAuth() {
+  return useContext(AuthContext);
+}

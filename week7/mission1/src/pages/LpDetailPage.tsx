@@ -8,7 +8,7 @@ import CommentListSkeletonList from "../components/CommentCard/CommentListSkelet
 import CommentCard from "../components/CommentCard/CommentList";
 import useGetInfiniteCommentsByLpId from "../hooks/queries/useGetInfiniteCommentsByLpId";
 import CommentInput from "../components/CommentCard/CommentInput";
-import { useAuth } from "../context/AuthContext";
+import useAuth from "../context/AuthContext";
 import { Heart, Pencil, Trash2, ImagePlus } from "lucide-react";
 import usePostLike from "../hooks/mutations/usePostLike";
 import useDeleteLike from "../hooks/mutations/useDeleteLike";
@@ -82,8 +82,8 @@ const LpDetailPage = () => {
   };
 
   const [liked, setLiked] = useState(false);
-  const { mutate: likeMutate } = usePostLike();
-  const { mutate: disLikeMutate } = useDeleteLike();
+  const { mutate: likeMutate } = usePostLike(lpid, user?.id!);
+  const { mutate: disLikeMutate } = useDeleteLike(lpid, user?.id!);
 
   useEffect(() => {
     if (lp && user) {
@@ -94,14 +94,22 @@ const LpDetailPage = () => {
   const handleLikeToggle = () => {
     if (!accessToken) return alert("로그인이 필요합니다.");
 
-    const action = liked ? disLikeMutate : likeMutate;
-    action(lpid, {
+    if (liked) {
+    disLikeMutate(undefined, {
       onSuccess: () => {
-        setLiked(!liked);
-        queryClient.invalidateQueries({ queryKey: ["lpDetail", id] });
+        setLiked(false);
+        queryClient.invalidateQueries({ queryKey: ["lpDetail", lpid] });
       },
     });
-  };
+  } else {
+    likeMutate(undefined, {
+      onSuccess: () => {
+        setLiked(true);
+        queryClient.invalidateQueries({ queryKey: ["lpDetail", lpid] });
+      },
+    });
+  }
+};
 
   const [editMode, setEditMode] = useState(false);
   const [editedTitle, setEditedTitle] = useState("");
@@ -232,12 +240,16 @@ const LpDetailPage = () => {
               </button>
             </>
           )}
-          <button onClick={handleLikeToggle}>
-            <Heart
-              color={liked ? "red" : "black"}
-              fill={liked ? "red" : "transparent"}
-            />
-          </button>
+          <button onClick={handleLikeToggle} className="flex items-center gap-1">
+  <Heart
+    color={liked ? "red" : "black"}
+    fill={liked ? "red" : "transparent"}
+  />
+  <span className="text-white text-sm">
+    {lp?.likes.length ?? 0}
+  </span>
+</button>
+
         </div>
       </div>
 
