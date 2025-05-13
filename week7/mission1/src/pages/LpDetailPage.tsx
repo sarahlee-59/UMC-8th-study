@@ -137,7 +137,7 @@ const LpDetailPage = () => {
         {
           title: editedTitle,
           content: editedContent,
-          thumbnail: newImageUrl,
+          thumbnail: newImageUrl || lp?.thumbnail,
           tags: editedTags,
         },
         { headers: { Authorization: `Bearer ${accessToken}` } }
@@ -145,7 +145,21 @@ const LpDetailPage = () => {
     },
     onSuccess: () => {
       alert("수정 완료");
-      queryClient.invalidateQueries({ queryKey: ["lpDetail", id] });
+
+      queryClient.setQueryData(["lpDetail", lpid], (old: Lp | undefined) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          title: editedTitle,
+          content: editedContent,
+          thumbnail: newImageUrl || old.thumbnail,
+          tags: editedTags.map((name, index) => ({
+            id: index, // 서버에서 id를 다시 받아오지 않는 경우를 위한 임시 ID
+            name,
+          })),
+        };
+      });
       setEditMode(false);
     },
   });
@@ -235,25 +249,6 @@ const LpDetailPage = () => {
         />
       )}
 
-      <div className="flex justify-end gap-2 mt-8">
-        <button
-          onClick={() => setOrder("asc")}
-          className={`px-3 py-1 border rounded ${
-            order === "asc" ? "bg-white text-black" : "bg-zinc-700 text-white"
-          }`}
-        >
-          오래된순
-        </button>
-        <button
-          onClick={() => setOrder("desc")}
-          className={`px-3 py-1 border rounded ${
-            order === "desc" ? "bg-white text-black" : "bg-zinc-700 text-white"
-          }`}
-        >
-          최신순
-        </button>
-      </div>
-
       {editMode ? (
         <div className="space-y-4">
           <input
@@ -326,8 +321,37 @@ const LpDetailPage = () => {
       )}
 
       <div className="space-y-4 mt-6">
-        <div className="font-bold text-2xl">댓글</div>
+        {/* 댓글 섹션 헤더 (제목 + 정렬 버튼) */}
+        <div className="flex justify-between items-center">
+          <div className="font-bold text-2xl">댓글</div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setOrder("asc")}
+              className={`px-3 py-1 border rounded ${
+                order === "asc"
+                  ? "bg-white text-black"
+                  : "bg-zinc-700 text-white"
+              }`}
+            >
+              오래된순
+            </button>
+            <button
+              onClick={() => setOrder("desc")}
+              className={`px-3 py-1 border rounded ${
+                order === "desc"
+                  ? "bg-white text-black"
+                  : "bg-zinc-700 text-white"
+              }`}
+            >
+              최신순
+            </button>
+          </div>
+        </div>
+
+        {/* 댓글 작성 인풋 */}
         <CommentInput lpId={id} />
+
+        {/* 댓글 리스트 */}
         {commentLoading ? (
           <CommentListSkeletonList count={5} />
         ) : (
@@ -354,7 +378,11 @@ const LpDetailPage = () => {
               />
             ))
         )}
+
+        {/* 무한스크롤 로딩용 스켈레톤 */}
         {isFetching && <CommentListSkeletonList count={3} />}
+
+        {/* 무한스크롤 트리거용 ref div */}
         <div ref={ref} className="h-10" />
       </div>
     </div>

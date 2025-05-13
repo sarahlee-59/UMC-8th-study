@@ -3,6 +3,7 @@ import { getMyInfo, updateMyInfo } from "../apis/auth";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 interface FormState {
   name: string;
@@ -62,6 +63,33 @@ const MyPage = () => {
       bio: form.bio || "",
       avatar: form.avatar || "",
     });
+  };
+
+  const handleAvatarUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_SERVER_API_URL}/v1/uploads`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage
+              .getItem("accessToken")
+              ?.replace(/^"|"$/g, "")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      setForm((prev) => ({
+        ...prev,
+        avatar: res.data.data.imageUrl, // 반환된 URL 저장
+      }));
+    } catch (err) {
+      alert("이미지 업로드에 실패했습니다.");
+    }
   };
 
   return (
@@ -125,28 +153,19 @@ const MyPage = () => {
             />
           </label>
 
-          {/* 프로필 이미지 URL 입력 토글 */}
           <div className="mb-2">
-            <button
-              onClick={() => setShowAvatarInput((prev) => !prev)}
-              className="text-blue-500 underline text-sm"
-            >
-              {showAvatarInput ? "사진 URL 입력 닫기" : "프로필 사진 URL 입력"}
-            </button>
-            {showAvatarInput && (
-              <input
-                type="text"
-                name="avatar"
-                value={form.avatar}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, avatar: e.target.value }))
-                }
-                placeholder="https://example.com/image.jpg"
-                className="w-full p-2 border mt-2"
-              />
-            )}
+            <label className="block mb-1">프로필 사진:</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) handleAvatarUpload(file);
+              }}
+              className="w-full p-2 border"
+            />
           </div>
-          {/* 프로필 이미지 미리보기 */}
+
           {form.avatar && (
             <div className="mt-4 flex justify-center">
               <img
