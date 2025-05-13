@@ -13,10 +13,9 @@ interface FormState {
 
 const MyPage = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, setUser } = useAuth(); // ✅ setUser 가져오기
   const [data, setData] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [showAvatarInput, setShowAvatarInput] = useState(false);
 
   const [form, setForm] = useState<FormState>({
     name: "",
@@ -42,6 +41,7 @@ const MyPage = () => {
     onSuccess: async () => {
       const updated = await getMyInfo();
       setData(updated);
+      setUser(updated.data); // ✅ 전역 상태 업데이트 (상단 환영 메시지 반영됨)
       setIsEditing(false);
       alert("정보가 수정되었습니다.");
     },
@@ -85,7 +85,7 @@ const MyPage = () => {
 
       setForm((prev) => ({
         ...prev,
-        avatar: res.data.data.imageUrl, // 반환된 URL 저장
+        avatar: res.data.data.imageUrl,
       }));
     } catch (err) {
       alert("이미지 업로드에 실패했습니다.");
@@ -107,9 +107,11 @@ const MyPage = () => {
           />
         </div>
       )}
+
       <h1>{data?.data?.name}</h1>
       <h1>{data?.data?.bio}</h1>
       <h1>{data?.data?.email}</h1>
+
       <button
         onClick={handleLogout}
         className="rounded-xl bg-gray-700 p-3 mt-5 font-bold text-white hover:scale-90"
