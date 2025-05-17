@@ -6,6 +6,7 @@ import LpCard from "../components/LpCard/LpCard";
 import LpCardSkeletonList from "../components/LpCard/LpCardSkeletonList";
 import LpModal from "../components/LpModal";
 import useDebounce from "../hooks/useDebounce";
+import useThrottleFn from "../hooks/useThrottleFn";
 
 const fetchInfiniteLps = async ({ pageParam = 0, queryKey }: any) => {
   const [, sortOrder, keyword] = queryKey;
@@ -16,9 +17,11 @@ const fetchInfiniteLps = async ({ pageParam = 0, queryKey }: any) => {
       cursor: pageParam,
       limit: 12,
       order: mappedOrder,
-      search: keyword
+      search: keyword,
     },
   });
+
+  console.log("📦 응답:", response.data.data);
 
   return {
     data: response.data.data.data,
@@ -32,13 +35,14 @@ const HomePage = () => {
   const debouncedSearch = useDebounce(search, 300);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState<"latest" | "oldest">("latest");
+
   const { ref, inView } = useInView({ threshold: 0 });
 
   const {
     data,
     fetchNextPage,
     hasNextPage,
-    isFetching,
+    isFetchingNextPage,
     isPending,
     isError,
   } = useInfiniteQuery({
@@ -49,15 +53,16 @@ const HomePage = () => {
       lastPage.hasNext ? lastPage.nextCursor : undefined,
   });
 
-  useEffect(() => {
-    if (inView && hasNextPage && !isFetching) {
-      console.log("📦 fetchNextPage 실행");
-      fetchNextPage();
-    }
-  }, [inView, hasNextPage, isFetching, fetchNextPage]);
+  const throttledFetchNextPage = useThrottleFn(() => {
+    console.log("📦 throttled fetchNextPage 실행");
+    fetchNextPage();
+  }, 3000);
 
-  if (isPending) return <div className="text-red-500">로딩 중...</div>;
-  if (isError) return <div className="text-red-500">에러 발생</div>;
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      throttledFetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, throttledFetchNextPage]);
 
   const lps = data?.pages.flatMap((page) => page.data) ?? [];
 
@@ -65,7 +70,7 @@ const HomePage = () => {
     setSearch(e.target.value);
   };
 
-  const filteredData = lps.filter(lp =>
+  const filteredData = lps.filter((lp) =>
     lp.title.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
     lp.content.toLowerCase().includes(debouncedSearch.toLowerCase())
   );
@@ -78,6 +83,7 @@ const HomePage = () => {
 
   return (
     <div className="container mx-auto px-4 py-6">
+      {/* 검색창 */}
       <input
         type="text"
         placeholder="검색어를 입력하세요"
@@ -112,17 +118,16 @@ const HomePage = () => {
 
       {/* LP 카드 목록 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-        {sortedData.map((lp) => (
-          <LpCard key={lp.id} lp={lp} />
-        ))}
-        {isFetching && <LpCardSkeletonList count={12} />}
+        {sortedData.map((lp, index) => {
+          const isLast = index === sortedData.length - 1;
+          return (
+            <div key={lp.id} ref={isLast ? ref : undefined}>
+              <LpCard lp={lp} />
+            </div>
+          );
+        })}
+        {isFetchingNextPage && <LpCardSkeletonList count={12} />}
       </div>
-
-      {/* 무한스크롤 감시 ref */}
-      <div className="pb-40">
-        <div ref={ref} className="h-10" />
-      </div>
-      {isFetching && <div className="text-center mt-4">추가 로딩 중...</div>}
 
       {/* + 버튼 */}
       <button
