@@ -34,10 +34,6 @@ const HomePage = () => {
   const [sortOrder, setSortOrder] = useState<"latest" | "oldest">("latest");
   const { ref, inView } = useInView({ threshold: 0 });
 
-  useEffect(() => {
-    console.log("🔍 검색어 디바운스 반영됨:", debouncedSearch);
-  }, [debouncedSearch]);
-
   const {
     data,
     fetchNextPage,
