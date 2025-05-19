@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -12,9 +12,11 @@ const fetchInfiniteLps = async ({ pageParam = 0 }: any) => {
   const response = await axios.get("http://localhost:8000/v1/lps", {
     params: {
       cursor: pageParam,
-      limit: 12,
+      limit: 10,
     },
   });
+
+  console.log("📦 응답:", response.data.data);
 
   return {
     data: response.data.data.data,
@@ -27,13 +29,15 @@ const HomePage = () => {
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState<"latest" | "oldest">("latest");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
 
   const debouncedSearch = useDebounce(search, 300);
   const throttledSearch = useThrottle(debouncedSearch, 300);
 
   const { ref, inView } = useInView({
     threshold: 1.0,
-    rootMargin: "200px",
+    rootMargin: "0px",
+    triggerOnce: false,
   });
 
   const {
@@ -42,7 +46,7 @@ const HomePage = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["lpList"],
+    queryKey: ["lpList", sortOrder, throttledSearch],
     queryFn: fetchInfiniteLps,
     initialPageParam: 0,
     getNextPageParam: (lastPage) =>
@@ -63,14 +67,18 @@ const HomePage = () => {
     return sortOrder === "latest" ? bTime - aTime : aTime - bTime;
   });
 
-  const throttledInView = useThrottle(inView, 1000);
-
+  // ✅ inView가 true일 때 3초 후 fetchNextPage
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
-    fetchNextPage();
-  }
-  }, [throttledInView, hasNextPage, isFetchingNextPage]);
-  
+      const timer = setTimeout(() => {
+        console.log("⏳ 3초 후 fetchNextPage 실행");
+        fetchNextPage();
+      }, 3000);
+
+      return () => clearTimeout(timer); // cleanup on unmount or condition change
+    }
+  }, [inView, hasNextPage, isFetchingNextPage]);
+
   return (
     <div className="container mx-auto px-4 py-6">
       {/* 🔍 검색창 */}
@@ -110,14 +118,12 @@ const HomePage = () => {
 
       {/* LP 카드 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 pt-5">
-        {sortedData.map((lp, index) => {
-  const isLast = index === sortedData.length - 1;
-  return (
-    <div key={lp.id} ref={isLast ? ref : undefined}>
-      <LpCard lp={lp} />
-    </div>
-  );
-})}
+        {sortedData.map((lp) => (
+          <LpCard key={lp.id} lp={lp} />
+        ))}
+
+        {/* 🔻 관찰 대상 div */}
+        <div key={data?.pages.length} ref={ref} className="h-40" />
 
         {isFetchingNextPage && <LpCardSkeletonList count={12} />}
       </div>
