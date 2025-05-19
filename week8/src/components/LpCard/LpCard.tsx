@@ -28,7 +28,7 @@ const LpCard = ({ lp }: LpCardProps) => {
   return (
     <div
       onClick={cardClick}
-      className="relative aspect-square overflow-hidden shadow-lg hover:shadow-2xl transition-transform duration-300 hover:scale-105 cursor-pointer"
+      className="relative aspect-square min-h-[200px] overflow-hidden shadow-lg hover:shadow-2xl transition-transform duration-300 hover:scale-105 cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -36,6 +36,7 @@ const LpCard = ({ lp }: LpCardProps) => {
         <img
           src={lp.thumbnail}
           alt={lp.title}
+          loading="lazy"
           className="object-cover w-full h-full transition duration-300 hover:brightness-50"
         />
       ) : (

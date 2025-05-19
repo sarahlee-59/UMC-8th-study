@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import useThrottle from "../hooks/useThrottleFn";
+import useThrottle from "../hooks/useThrottle";
 
 const ThrottlePage = () => {
   const [scrollY, setScrollY] = useState<number>(0);
