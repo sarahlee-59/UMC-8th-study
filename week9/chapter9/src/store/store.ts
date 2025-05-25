@@ -1,4 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
+import type { sortUserPlugins } from 'vite';
+import cartReducer from '../slices/cartSlice';
 
 // 1. 저장소 생성
 function createStore() {
@@ -18,3 +20,8 @@ function createStore() {
 const store = createStore();
 
 export default store;
+
+// Infer the 'RootState' and 'AppDispatch' types from the store itself
+export type RootState = ReturnType<typeof store.getState>;
+// Inferred type: {posts: PostsStae, comments: CommentsState, users: UserState}
+export type AppDispatch = typeof store.dispatch;
