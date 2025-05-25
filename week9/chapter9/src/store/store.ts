@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import type { sortUserPlugins } from 'vite';
 import cartReducer from '../slices/cartSlice';
+import modalReducer from '../slices/modalSlice';
 
 // 1. 저장소 생성
 function createStore() {
@@ -17,7 +17,12 @@ function createStore() {
 // store를 활용할 수 있도록 내보내야 함.
 // 여기서 실행해서 스토어를 빼준다.
 // 싱글톤 패턴
-const store = createStore();
+const store = configureStore({
+    reducer: {
+        cart: cartReducer,
+        modal: modalReducer,
+    },
+});
 
 export default store;
 
