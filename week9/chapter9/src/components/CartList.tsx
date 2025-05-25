@@ -1,11 +1,14 @@
 import CartItem from './CartItem';
 import { useAppSelector } from '../hooks/useCustomRedux';
+import { useCartActions, useCartInfo } from '../hooks/useCartStore';
 
 const CartList = ()=> {
-    const { cartItems } = useAppSelector((state) =>
-        state.cart
-    );
+    const { cartItems } = useCartInfo();
+    const { clearCart } = useCartActions();
 
+    const handleAllClearButton = () => {
+        clearCart();
+    }
     return (
         <div className='flex flex-col items-center justify-center'>
             <ul>
