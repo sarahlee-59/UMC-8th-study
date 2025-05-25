@@ -6,7 +6,7 @@ interface CartItemProps {
     lp: Lp;
 }
 
-const CartItem = ({ lp } : CartItemProps) : Element => {
+const CartItem = ({ lp } : CartItemProps) => {
     const dispatch = useDispatch();
     
     const handleIncreaseCount = () => {

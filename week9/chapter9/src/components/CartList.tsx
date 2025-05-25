@@ -1,7 +1,7 @@
 import CartItem from './CartItem';
 import { useSelector } from '../hooks/useCustomRedux';
 
-const CartList = () : Element=> {
+const CartList = ()=> {
     const { cartItems } = useSelector((state) =>
         state.cart
     );
@@ -9,7 +9,7 @@ const CartList = () : Element=> {
     return (
         <div className='flex flex-col items-center justify-center'>
             <ul>
-                {cartItems.map((item) : Element=> (
+                {cartItems.map((item)=> (
                     <CartItem key={item.id} lp={item} />
                 ))}
             </ul>
