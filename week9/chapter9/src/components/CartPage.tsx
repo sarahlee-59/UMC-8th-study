@@ -1,7 +1,6 @@
 import { useAppSelector } from '../hooks/useCustomRedux';
 import Modal from '../components/Modal';
 import ModalButton from '../components/ModalButton';
-import PriceBox from '../components/PriceBox';
 
 const CartPage = () => {
   const isOpen = useAppSelector((state) => state.modal.isOpen);
