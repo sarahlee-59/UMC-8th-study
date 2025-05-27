@@ -5,10 +5,10 @@ import Navbar from './components/Navbar';
 import store from './store/store';
 import PriceBox from './components/PriceBox';
 import Modal from './components/Modal';
-import { useAppSelector } from './hooks/useCustomRedux';
+import { useModalStore } from './hooks/useModalStore';
 
 function AppContent() {
-  const isOpen = useAppSelector((state) => state.modal.isOpen);
+  const isOpen = useModalStore((state) => state.isOpen);
 
   return (
     <>

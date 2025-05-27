@@ -1,17 +1,17 @@
-import { useAppDispatch } from '../hooks/useCustomRedux';
-import { closeModal } from '../slices/modalSlice';
-import { clearCart } from '../slices/cartSlice';
+import { useModalStore } from '../hooks/useModalStore';
+import { useCartActions } from '../hooks/useCartStore';
 
 const Modal = () => {
-  const dispatch = useAppDispatch();
+  const closeModal = useModalStore((state) => state.closeModal);
+  const { clearCart } = useCartActions();
 
   const handleCancel = () => {
-    dispatch(closeModal());
+    (closeModal());
   };
 
   const handleConfirm = () => {
-    dispatch(clearCart());
-    dispatch(closeModal());
+    (clearCart());
+    (closeModal());
   };
 
   return (

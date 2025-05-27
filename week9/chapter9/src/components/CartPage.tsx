@@ -10,7 +10,6 @@ const CartPage = () => {
     <div className="p-8">
       <h1 className="text-2xl mb-4">장바구니</h1>
       <ModalButton />
-      <PriceBox />
       {isOpen && <Modal />} {}
     </div>
   );

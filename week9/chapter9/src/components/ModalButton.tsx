@@ -1,12 +1,10 @@
-import { useAppDispatch } from '../hooks/useCustomRedux';
-import { openModal } from '../slices/modalSlice';
+import { useModalStore } from '../hooks/useModalStore';
 
 const ModalButton = () => {
-  const dispatch = useAppDispatch();
-
+  const openModal = useModalStore((state) => state.openModal);
   return (
     <button
-      onClick={() => dispatch(openModal())}
+      onClick={openModal}
       className="border px-4 py-2 rounded hover:bg-gray-100"
     >
       전체 삭제
