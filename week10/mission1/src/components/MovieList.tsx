@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { Movie } from "../types/movie";
 import MovieCard from "./MovieCard";
 
@@ -25,5 +26,6 @@ const MovieList = ({ movies, onClickCard }: MovieListProps) => {
     </div>
     );
 };
+MovieList.whyDidYouRender = true;
 
-export default MovieList;
+export default memo(MovieList);

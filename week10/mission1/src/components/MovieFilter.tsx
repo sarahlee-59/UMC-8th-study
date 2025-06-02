@@ -82,5 +82,6 @@ const MovieFilter = ({ onChange }: MovieFilterProps) => {
         </div>
     );
 };
+MovieFilter.whyDidYouRender = true;
 
 export default memo(MovieFilter);
