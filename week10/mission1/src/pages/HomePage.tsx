@@ -27,6 +27,8 @@ export default function HomePage() {
         axiosRequestConfig,
     );
 
+    const movies = useMemo(() => data?.results || [], [data]);
+
     const handleMovieFilters = useCallback((filters: MovieFilters) => {
         setFilters(filters);
     }, 
@@ -51,7 +53,7 @@ export default function HomePage() {
             {isLoading ? (
                 <div>로딩 중 입니다...</div>
             ) : (
-                <MovieList movies={data?.results || []} onClickCard={handleCardClick}/>
+                <MovieList movies={movies} onClickCard={handleCardClick}/>
             )}   
 
             {selectedMovie && (

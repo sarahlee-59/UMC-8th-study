@@ -1,5 +1,5 @@
 import { memo, useCallback, useState } from "react";
-import type { MovieLanguage, MovieFilters } from "../types/movie";
+import type { MovieFilters } from "../types/movie";
 import { Input } from "./Input";
 import { SelectBox } from "./SelectBox";
 import LanguageSelector from "./LanguageSelector";
@@ -29,13 +29,11 @@ const MovieFilter = ({ onChange }: MovieFilterProps) => {
     }, []);
     
     const handleSubmit = useCallback(() => {
-        const filters: MovieFilters = {
+        onChange({
             query,
             include_adult: includeAdult,
             language,
-        };
-        console.log(filters);
-        onChange(filters);
+        });
     }, [query, includeAdult, language, onChange]);
 
     return (

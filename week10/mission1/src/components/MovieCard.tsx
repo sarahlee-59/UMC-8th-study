@@ -7,7 +7,7 @@ interface MovieCardProps {
 
 const MovieCard = ({ movie }: MovieCardProps) => {
   const imageBaseUrl = "https://image.tmdb.org/t/p/w500";
-  const fallbackImageImage =
+  const fallbackImage =
     "https://cdn.inflearn.com/public/files/blogs/fcf7f1f8-adeb-4ff7-bdaf-ebaf26245005/blob";
 
   return (
@@ -20,7 +20,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
           src={
             movie.poster_path
               ? `${imageBaseUrl}${movie.poster_path}`
-              : fallbackImageImage
+              : fallbackImage
           }
           alt={`${movie.title} 포스터`}
           className="h-full w-full object-cover transition-transform duration-300 ease-in-out hover:scale-105"
